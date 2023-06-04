@@ -22,9 +22,18 @@
       <p>{{ outputGoal() }}</p>
       <p>Learn more <a v-bind:href="vueLink">about Vue</a>.</p>
       <div><button v-on:click="addName()">add name</button></div>
+      <div>{{names.toString()}}</div>
       <div v-for="name in names">
         <span>{{ name }}</span>
       </div>
+      <div><button v-on:click="changeInputValue()">change input value</button></div>
+      <input type="text" v-bind:value="inputValue">
+      <div>
+        <button v-on:click="changeCounter(1)">add</button>
+        <button v-on:click="changeCounter(-1)">remove</button>
+        <span>{{ counter }}</span>
+      </div>
+      <img v-bind:src="imageUrl">
     </section>
   </body>
 </html>
