@@ -21,10 +21,9 @@
        <p v-html="outputGoal()"></p>
       <p>{{ outputGoal() }}</p>
       <p>Learn more <a v-bind:href="vueLink">about Vue</a>.</p>
-      <div><button v-on:click="addName()">add name</button></div>
-      <div>{{names.toString()}}</div>
-      <div v-for="name in names">
-        <span>{{ name }}</span>
+      <div><button v-on:click.right="addName()">add name</button></div>
+      <div v-for="name in names" :key="name.id">
+        <span>{{ name.value }}</span>
       </div>
       <div><button v-on:click="changeInputValue()">change input value</button></div>
       <input type="text" v-bind:value="inputValue">
@@ -32,6 +31,16 @@
         <button v-on:click="changeCounter(1)">add</button>
         <button v-on:click="changeCounter(-1)">remove</button>
         <span>{{ counter }}</span>
+      </div>
+      <div>
+        <input type="text" v-on:input="updateName($event)">
+        <span>{{ inputName }}</span>
+      </div>
+      <div>
+        <form v-on:submit.prevent="submitForm">
+         <input type="text">
+          <button>Sing up</button>
+        </form>
       </div>
       <img v-bind:src="imageUrl">
     </section>

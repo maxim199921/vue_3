@@ -4,10 +4,11 @@ Vue.createApp({
       courseGoalA: 'Finish the course and learn Vue!',
       courseGoalB: 'Master Vue and build amazing apps!',
       vueLink: 'https://vuejs.org/',
-      names: ['maks', 'dima', 'pasha'],
+      names: [{id: Math.random(), value: 'maks'}, {id: Math.random(), value: 'pasha'}, {id: Math.random(), value: 'dima'}],
       imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWsuOZA3UHiH0_1nP5Kj5AVEM352JABXPdGTpY0SWt&s',
       inputValue: 'hello',
       counter: 1,
+      inputName: '',
     };
   },
   methods: {
@@ -20,13 +21,19 @@ Vue.createApp({
       }
     },
     addName() {
-      this.names.push('vova');
+      this.names.push({id: Math.random(), value: 'vova'});
     },
     changeInputValue() {
       this.inputValue = 'by';
     },
     changeCounter(value) {
       this.counter += value;
+    },
+    updateName(e) {
+      this.inputName = e.target.value;
+    },
+    submitForm(e) {
+      alert('submited');
     }
   }
 }).mount('#app-vue');
