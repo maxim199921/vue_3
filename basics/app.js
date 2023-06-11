@@ -9,7 +9,13 @@ Vue.createApp({
       inputValue: 'hello',
       counter: 1,
       inputName: '',
+      inputNameSecondary: '',
     };
+  },
+  computed: {
+    nameAndCounter() {
+      return this.inputNameSecondary + this.counter;
+    },
   },
   methods: {
     outputGoal() {
@@ -34,7 +40,10 @@ Vue.createApp({
     },
     submitForm(e) {
       alert('submited');
+    },
+    resetInput() {
+      this.inputNameSecondary = '';
     }
-  }
+  },
 }).mount('#app-vue');
 

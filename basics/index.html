@@ -30,11 +30,18 @@
       <div>
         <button v-on:click="changeCounter(1)">add</button>
         <button v-on:click="changeCounter(-1)">remove</button>
-        <span>{{ counter }}</span>
+        <div v-once>starting counter value {{ counter }}</div>
+        <div>counter value: {{ counter }}</div>
       </div>
       <div>
         <input type="text" v-on:input="updateName($event)">
         <span>{{ inputName }}</span>
+      </div>
+      <div>
+        <input type="text" v-model="inputNameSecondary">
+        <button v-on:click="resetInput()">reset</button>
+        <div>{{ inputNameSecondary }}</div>
+        <div>{{ nameAndCounter }}</div>
       </div>
       <div>
         <form v-on:submit.prevent="submitForm">
