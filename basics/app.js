@@ -10,7 +10,14 @@ Vue.createApp({
       counter: 1,
       inputName: '',
       inputNameSecondary: '',
+      fullName: '',
+      name: '',
     };
+  },
+  watch: {
+    name(value) {
+       this.fullName = `full name changed to value ${value}`;
+    },
   },
   computed: {
     nameAndCounter() {
@@ -18,6 +25,9 @@ Vue.createApp({
     },
   },
   methods: {
+    changeNameWatcher() {
+      this.name = 'max';
+    },
     outputGoal() {
       const randomNumber = Math.random();
       if (randomNumber < 0.5) {

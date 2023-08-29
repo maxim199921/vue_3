@@ -1,0 +1,37 @@
+@import "utils";
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+}
+
+#__nuxt {
+  height: 100%;
+}
+
+.container {
+  @extend .d-flex-column;
+
+  height: 100%;
+
+  .header {
+    flex: 0 0 auto;
+    background-color: wheat;
+    padding: 10px;
+  }
+
+  .main-content {
+    flex: 1 0 auto;
+    padding: 10px;
+  }
+
+  .footer {
+    flex: 0 0 auto;
+    background-color: cyan;
+    padding: 10px;
+  }
+}
