@@ -34,7 +34,7 @@
         <div>counter value: {{ counter }}</div>
       </div>
       <div>
-        <input type="text" v-on:input="updateName($event)">
+        <input ref="nameInput" type="text" v-on:input="updateName($event)">
         <span>{{ inputName }}</span>
       </div>
       <div>

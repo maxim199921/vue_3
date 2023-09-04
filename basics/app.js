@@ -46,7 +46,8 @@ Vue.createApp({
       this.counter += value;
     },
     updateName(e) {
-      this.inputName = e.target.value;
+      // this.inputName = e.target.value;
+      this.inputName = this.$refs.nameInput.value;
     },
     submitForm(e) {
       alert('submited');
