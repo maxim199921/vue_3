@@ -1,7 +1,11 @@
 @import "utils";
+@import "layout";
+@import "general";
+@import "variables";
 
 html {
   height: 100%;
+  font-family: $font-primary;
 }
 
 body {
@@ -16,22 +20,31 @@ body {
 .container {
   @extend .d-flex-column;
 
+  background: $color-neutral-400;
   height: 100%;
 
   .header {
     flex: 0 0 auto;
-    background-color: wheat;
-    padding: 10px;
+    background-color: $color-neutral;
+    padding: $size-2;
+    height: 60px;
+    width: 100%;
+    border-radius: $border-radius;
+    box-sizing: border-box;
   }
 
   .main-content {
     flex: 1 0 auto;
-    padding: 10px;
+    padding: $size-2;
+    box-sizing: border-box;
+    background: $color-neutral-400;
   }
 
   .footer {
     flex: 0 0 auto;
-    background-color: cyan;
-    padding: 10px;
+    background-color: $color-neutral-800;
+    height: 50px;
+    padding: $size-2;
+    box-sizing: border-box;
   }
 }

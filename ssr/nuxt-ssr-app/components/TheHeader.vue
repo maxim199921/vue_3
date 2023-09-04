@@ -1,49 +1,58 @@
 <template>
-    <header class="header">
-        <div class="nav">
-            <div>
-                <li>
-                    <NuxtLink to="/">logo</NuxtLink>
-                </li>
-            </div>
+  <header class="header">
+    <div class="nav">
+      <div>
+        <li>
+          <NuxtLink to="/">logo</NuxtLink>
+        </li>
+      </div>
 
-            <ul>
-                <li>
-                    <NuxtLink to="/">home</NuxtLink>
-                </li>
-                <li>
-                    <NuxtLink to="/catalog">catalog</NuxtLink>
-                </li>
-                <li>
-                    <NuxtLink to="about">about</NuxtLink>
-                </li>
-                <li>
-                    <NuxtLink to="terms">terms</NuxtLink>
-                </li>
-                <li class="ml-40">
-                    <NuxtLink to="auth">auth</NuxtLink>
-                </li>
-            </ul>
-        </div>
-    </header>
+      <ul>
+        <li>
+          <NuxtLink to="/">home</NuxtLink>
+        </li>
+        <li>
+          <NuxtLink to="/catalog">catalog</NuxtLink>
+        </li>
+        <li>
+          <NuxtLink to="about">about</NuxtLink>
+        </li>
+        <li>
+          <NuxtLink to="terms">terms</NuxtLink>
+        </li>
+        <li class="ml-40">
+          <NuxtLink to="auth">auth</NuxtLink>
+        </li>
+      </ul>
+    </div>
+  </header>
 </template>
 
-<style scoped>
-    .nav {
-        display: flex;
-        justify-content: space-between;
-    }
+<style scoped lang="scss">
+@import 'assets/scss/utils.scss';
+@import 'assets/scss/variables.scss';
 
-    li {
-        list-style-type: none;
-        padding-left: 10px;
-    }
+.nav {
+  @extend .d-flex-center-between;
 
-    ul {
-        display: flex;
-        padding: 0;
-        margin: 0;
-    }
+  height: 100%;
+  width: 100%;
+}
+
+ul {
+  display: flex;
+  padding: 0;
+  margin: 0;
+
+  li {
+    list-style-type: none;
+    padding-left: 10px;
+    color: $color-neutral-100;
+  }
+
+  a {
+    color: $color-neutral-100;
+  }
+}
 </style>
-<script setup lang="ts">
-</script>
+

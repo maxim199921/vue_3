@@ -145,22 +145,6 @@ $color-error-900: map-get($color-error-shades, 900);
 // Fonts
 $font-primary: Roboto, "Helvetica Neue", sans-serif;
 
-// Sizes
-$border-radius: 8px;
-$border-radius-modal: 6px;
-$border-radius-small: 4px;
-$border-radius-large: 24px;
-$main-sidenav-width: 96px;
-$header-height: 64px;
-$sub-header-height: 130px;
-$title-height: 60px;
-$content-height: calc(100vh - #{$header-height}); // without header
-$empty-content-height: calc(100vh - #{$header-height} - #{$title-height}); // without header and title
-$question-panel-max-width: 1068px;
-$activity-navigation-panel-width: 324px;
-$activity-navigation-panel-inside-width: 248px;
-$brainstorm-card-width-breakpoint: 1675px;
-
 // Statuses & Categorization
 $status-completed: #56c568;
 $status-info: #3fa2f7;
@@ -169,8 +153,8 @@ $status-warning: #ffc400;
 $status-inactive: #d4d4d4;
 
 // Backgrounds
-$color-background-primary: $color-neutral-200;
-$color-background-light: $color-neutral-100;
+$color-background-primary: $color-neutral-400;
+$color-background-light: $color-neutral-200;
 
 // Box shadow
 $color-box-shadow-primary: rgba(0, 0, 0, 0.16);
