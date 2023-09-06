@@ -1,0 +1,53 @@
+@import "utils";
+@import "layout";
+@import "general";
+@import "variables";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+html {
+  height: 100%;
+  font-family: $font-primary;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+}
+
+#__nuxt {
+  height: 100%;
+}
+
+.container {
+  @extend .d-flex-column;
+
+  background: $color-neutral-400;
+
+  .header {
+    flex: 0 0 auto;
+    background-color: $color-neutral;
+    padding: $size-2;
+    height: 60px;
+    width: 100%;
+    border-radius: $border-radius;
+    border-bottom-left-radius: initial;
+    border-bottom-right-radius: initial;
+    box-sizing: border-box;
+  }
+
+  .main-content {
+    flex: 1 0 auto;
+    box-sizing: border-box;
+    background: $color-neutral-400;
+    margin-top: $header-top-indent;
+  }
+
+  .footer {
+    flex: 0 0 auto;
+    padding: 0;
+  }
+}
+
+a {
+  text-decoration: none;
+}

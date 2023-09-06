@@ -1,0 +1,23 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev-local": "nuxt dev --dotenv .env.local",
+    "dev-prod": "nuxt dev --dotenv .env.prod",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@nuxt/typescript-build": "^3.0.1",
+    "nuxt": "^3.7.0"
+  },
+  "dependencies": {
+    "@mdi/font": "^7.2.96",
+    "nuxt-class-component": "^1.3.0",
+    "sass": "^1.66.1",
+    "vuetify": "^3.3.0"
+  }
+}
