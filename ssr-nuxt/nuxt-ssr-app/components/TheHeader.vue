@@ -14,6 +14,15 @@
 
       <ul>
         <li>
+          <v-select
+              v-model="$i18n.locale"
+              :items="['en', 'ru', 'ge']"
+              variant="outlined"
+              density="compact"
+              hide-details
+          ></v-select>
+        </li>
+        <li>
           <NuxtLink to="catalog">
             <v-btn variant="plain">catalog</v-btn>
           </NuxtLink>
@@ -64,5 +73,11 @@
       color: $color-neutral-100;
     }
   }
+
+  select {
+    color: $color-neutral-100;
+  }
 }
 </style>
+<script setup lang="ts">
+</script>

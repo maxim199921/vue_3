@@ -1,10 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
-  runtimeConfig: {
-    public: {
-      apiHost: process.env.API_HOST,
+  app: {
+    head: {
+      charset: 'utf-8',
+      viewport: 'width=device-width, initial-scale=1',
     }
+  },
+  build: {
+    transpile: ['vuetify'],
   },
   css: [
     'vuetify/lib/styles/main.sass',
@@ -12,18 +15,15 @@ export default defineNuxtConfig({
     '~/assets/scss/main.scss',
     '~/assets/scss/utils.scss',
   ],
-  build: {
-    transpile: ['vuetify'],
+  devtools: {enabled: true},
+  runtimeConfig: {
+    public: {
+      apiHost: process.env.API_HOST,
+    }
   },
   vite: {
     define: {
       'process.env.DEBUG': false,
     },
-  },
-  app: {
-    head: {
-      charset: 'utf-8',
-      viewport: 'width=device-width, initial-scale=1',
-    }
   }
 })

@@ -35,7 +35,7 @@
         </v-card-text>
 
         <v-card-actions>
-          <NuxtLink to="/admin/edit">
+          <NuxtLink :to="`/admin/edit?id=${index + 1}`">
             <v-btn color="orange">
               Edit
             </v-btn>

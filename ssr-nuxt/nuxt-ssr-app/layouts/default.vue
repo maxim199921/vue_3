@@ -5,7 +5,8 @@
         </div>
 
         <section class="main-content">
-            <NuxtPage />
+          <h1>{{ $t('hello', { name: 'vue-i18n' }) }}</h1>
+          <NuxtPage />
         </section>
 
       <TheFooter />
