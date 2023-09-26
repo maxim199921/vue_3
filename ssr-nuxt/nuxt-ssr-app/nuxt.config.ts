@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     }
   },
   build: {
-    transpile: ['vuetify'],
+    transpile: ['vuetify', 'vue-tel-input', '@fawmi/vue-google-maps'],
   },
   css: [
     'vuetify/lib/styles/main.sass',

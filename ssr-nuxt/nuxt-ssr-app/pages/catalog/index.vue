@@ -1,4 +1,7 @@
 <template>
+  <div class="filters">
+    <the-main-filters></the-main-filters>
+  </div>
   <div class="wrapper">
     <template v-for="(catalog, index) in catalogs">
       <v-card class="card">
@@ -35,6 +38,8 @@
 </template>
 
 <script setup>
+import TheMainFilters from "~/components/TheMainFilters.vue";
+
 const {data: catalogs} = useAsyncData('catalog', () => $fetch('/api/catalog'));
 </script>
 

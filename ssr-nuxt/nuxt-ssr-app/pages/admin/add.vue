@@ -5,6 +5,10 @@
     </v-btn>
   </NuxtLink>
 
+  <div class="google-maps">
+    <the-google-map></the-google-map>
+  </div>
+
   <div class="wrapper">
     <v-sheet class="mx-auto form">
       <form @submit.prevent="submit">

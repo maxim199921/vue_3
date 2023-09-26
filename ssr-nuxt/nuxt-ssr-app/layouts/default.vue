@@ -5,7 +5,6 @@
         </div>
 
         <section class="main-content">
-          <h1>{{ $t('hello', { name: 'vue-i18n' }) }}</h1>
           <NuxtPage />
         </section>
 
