@@ -5,10 +5,6 @@
     </v-btn>
   </NuxtLink>
 
-  <div class="google-maps">
-    <the-google-map></the-google-map>
-  </div>
-
   <div class="wrapper">
     <v-sheet class="mx-auto form">
       <form @submit.prevent="submit">
@@ -99,24 +95,6 @@
               typevariant="underlined"
           ></v-text-field>
         </div>
-        <div class="latitude">
-          <v-text-field
-              v-model="latitude.value.value"
-              :error-messages="latitude.errorMessage.value"
-              type="number"
-              label="Latitude"
-              typevariant="underlined"
-          ></v-text-field>
-        </div>
-        <div class="longitude">
-          <v-text-field
-              v-model="longitude.value.value"
-              :error-messages="longitude.errorMessage.value"
-              type="number"
-              label="Longitude"
-              typevariant="underlined"
-          ></v-text-field>
-        </div>
         <div class="type-of-finish">
           <v-select
               multiple
@@ -135,7 +113,32 @@
               :items="['Townhouse', 'Houses', 'Apartments']"
           ></v-select>
         </div>
-
+        <div class="google-maps w-100">
+          <the-google-map-coordinates
+              @coordinates="setCoordinates($event)"
+          >
+          </the-google-map-coordinates>
+        </div>
+        <div class="latitude">
+          <v-text-field
+              v-model="latitude.value.value"
+              :error-messages="latitude.errorMessage.value"
+              type="text"
+              label="Latitude"
+              typevariant="underlined"
+              disabled
+          ></v-text-field>
+        </div>
+        <div class="longitude">
+          <v-text-field
+              v-model="longitude.value.value"
+              :error-messages="longitude.errorMessage.value"
+              type="text"
+              label="Longitude"
+              typevariant="underlined"
+              disabled
+          ></v-text-field>
+        </div>
         <v-btn
             class="me-4"
             type="submit"
@@ -172,8 +175,8 @@ const validationSchema = yup.object({
   bathroom: yup.mixed().required(),
   city: yup.mixed().required(),
   address: yup.string().required().min(5).max(255),
-  latitude: yup.number().required().min(-90).max(90),
-  longitude: yup.number().required().min(-180).max(180),
+  latitude: yup.number().min(-90).max(90),
+  longitude: yup.number().min(-180).max(180),
   typeOfFinish: yup.array().required().test('is-required', requiredError('typeOfFinish'), items => items.length !== 0),
   objectsType: yup.mixed().required(),
 });
@@ -202,6 +205,10 @@ const submit = handleSubmit(values => {
   //TODO send request with form data, reset form, add tooltip;
 })
 
+const setCoordinates = ({ lat, lng }) => {
+  latitude.setValue(lat);
+  longitude.setValue(lng);
+}
 </script>
 
 <style scoped lang="scss">

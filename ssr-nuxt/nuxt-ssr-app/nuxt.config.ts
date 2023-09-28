@@ -19,6 +19,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiHost: process.env.API_HOST,
+      apiGoogleMapsKey: process.env.API_GOOGLE_MAPS_KEY,
     }
   },
   vite: {
