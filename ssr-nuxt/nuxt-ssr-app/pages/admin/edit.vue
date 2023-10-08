@@ -118,16 +118,16 @@
           <v-select
               multiple
               data-vv-rules="required"
-              v-model="typeOfFinish.value.value"
-              :error-messages="typeOfFinish.errorMessage.value"
+              v-model="finishingTypes.value.value"
+              :error-messages="finishingTypes.errorMessage.value"
               label="Type of finish"
               :items="['white frame', 'black frame', 'green frame', 'turnkey finishing']"
           ></v-select>
         </div>
         <div class="objects-type">
           <v-select
-              v-model="objectsType.value.value"
-              :error-messages="objectsType.errorMessage.value"
+              v-model="type.value.value"
+              :error-messages="type.errorMessage.value"
               label="Object Type"
               :items="['Townhouse', 'Houses', 'Apartments']"
           ></v-select>
@@ -171,8 +171,8 @@ const validationSchema = yup.object({
   address: yup.string().required().min(5).max(255),
   latitude: yup.number().required().min(-90).max(90),
   longitude: yup.number().required().min(-180).max(180),
-  typeOfFinish: yup.array().required().test('is-required', requiredError('typeOfFinish'), items => items.length !== 0),
-  objectsType: yup.mixed().required(),
+  finishingTypes: yup.array().required().test('is-required', requiredError('finishingTypes'), items => items.length !== 0),
+  type: yup.mixed().required(),
 });
 
 const {handleSubmit, resetForm} = useForm({
@@ -192,7 +192,7 @@ const address = useField('address');
 const latitude = useField('latitude');
 const longitude = useField('longitude');
 const typeOfFinish = useField('typeOfFinish');
-const objectsType = useField('objectsType');
+const type = useField('type');
 
 const route = useRoute();
 const { data } = await useAsyncData('catalog', () => $fetch('/api/catalog'));

@@ -99,16 +99,16 @@
           <v-select
               multiple
               data-vv-rules="required"
-              v-model="typeOfFinish.value.value"
-              :error-messages="typeOfFinish.errorMessage.value"
+              v-model="finishingTypes.value.value"
+              :error-messages="finishingTypes.errorMessage.value"
               label="Type of finish"
               :items="['white frame', 'black frame', 'green frame', 'turnkey finishing']"
           ></v-select>
         </div>
         <div class="objects-type">
           <v-select
-              v-model="objectsType.value.value"
-              :error-messages="objectsType.errorMessage.value"
+              v-model="type.value.value"
+              :error-messages="type.errorMessage.value"
               label="Object Type"
               :items="['Townhouse', 'Houses', 'Apartments']"
           ></v-select>
@@ -177,8 +177,8 @@ const validationSchema = yup.object({
   address: yup.string().required().min(5).max(255),
   latitude: yup.number().min(-90).max(90),
   longitude: yup.number().min(-180).max(180),
-  typeOfFinish: yup.array().required().test('is-required', requiredError('typeOfFinish'), items => items.length !== 0),
-  objectsType: yup.mixed().required(),
+  finishingTypes: yup.array().required().test('is-required', requiredError('typeOfFinish'), items => items.length !== 0),
+  type: yup.mixed().required(),
 });
 
 const { handleSubmit } = useForm({
@@ -197,12 +197,20 @@ const city = useField('city');
 const address = useField('address');
 const latitude = useField('latitude');
 const longitude = useField('longitude');
-const typeOfFinish = useField('typeOfFinish');
-const objectsType = useField('objectsType');
+const finishingTypes = useField('finishingTypes');
+const type = useField('type');
 
-const submit = handleSubmit(values => {
+const submit = handleSubmit( async values => {
   console.log(values);
-  //TODO send request with form data, reset form, add tooltip;
+
+  const { data: responseData } = await useFetch('http://localhost:8080/api/admin/estates', {
+    method: 'post',
+    body: {
+      ...values
+    }
+  })
+
+  console.log(data);
 })
 
 const setCoordinates = ({ lat, lng }) => {
