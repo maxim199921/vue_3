@@ -177,7 +177,7 @@ const validationSchema = yup.object({
   address: yup.string().required().min(5).max(255),
   latitude: yup.number().min(-90).max(90),
   longitude: yup.number().min(-180).max(180),
-  finishingTypes: yup.array().required().test('is-required', requiredError('typeOfFinish'), items => items.length !== 0),
+  finishingTypes: yup.array().required().test('is-required', requiredError('finishingTypes'), items => items.length !== 0),
   type: yup.mixed().required(),
 });
 
