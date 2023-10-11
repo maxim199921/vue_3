@@ -102,7 +102,7 @@
               v-model="finishingTypes.value.value"
               :error-messages="finishingTypes.errorMessage.value"
               label="Type of finish"
-              :items="['white frame', 'black frame', 'green frame', 'turnkey finishing']"
+              :items="['WHITE_FRAME', 'BLACK_FRAME', 'GREEN_FRAME']"
           ></v-select>
         </div>
         <div class="objects-type">
@@ -152,11 +152,13 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {useField, useForm} from 'vee-validate'
 import * as yup from 'yup';
 import {maxFileSize, maxFileSizeError, requiredError} from '~/constants/form';
 import {validateFileArray} from '~/services/utils';
+import {Estate} from "~/models/estate";
+import {DBPathHelper} from "~/services/db-helper";
 
 definePageMeta({
   layout: 'admin'
@@ -181,7 +183,7 @@ const validationSchema = yup.object({
   type: yup.mixed().required(),
 });
 
-const { handleSubmit } = useForm({
+const {handleSubmit, resetForm} = useForm({
   validationSchema,
 })
 
@@ -197,23 +199,38 @@ const city = useField('city');
 const address = useField('address');
 const latitude = useField('latitude');
 const longitude = useField('longitude');
+//TODO add enum
 const finishingTypes = useField('finishingTypes');
 const type = useField('type');
 
-const submit = handleSubmit( async values => {
-  console.log(values);
-
-  const { data: responseData } = await useFetch('http://localhost:8080/api/admin/estates', {
-    method: 'post',
+const submit = handleSubmit(async values => {
+  //TODO add loader to btn and type-of-finish add key
+  const runtimeConfig = useRuntimeConfig();
+  const estate = new Estate(values);
+  const path = DBPathHelper.getEstatesPath(runtimeConfig.public.apiHost);
+  const {data, error} = await useFetch(path, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: {
-      ...values
+      ...estate
     }
   })
 
-  console.log(data);
+  if (error.value) {
+    //TODO add error notification
+    console.log(error.value.data)
+  }
+
+  if (data) {
+    //TODO add success error notification with id
+    console.log(data.value);
+    resetForm();
+  }
 })
 
-const setCoordinates = ({ lat, lng }) => {
+const setCoordinates = ({lat, lng}: {lat: string, lng: string}) => {
   latitude.setValue(lat);
   longitude.setValue(lng);
 }

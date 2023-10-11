@@ -121,7 +121,7 @@
               v-model="finishingTypes.value.value"
               :error-messages="finishingTypes.errorMessage.value"
               label="Type of finish"
-              :items="['white frame', 'black frame', 'green frame', 'turnkey finishing']"
+              :items="['WHITE_FRAME', 'BLACK_FRAME', 'GREEN_FRAME']"
           ></v-select>
         </div>
         <div class="objects-type">
@@ -146,11 +146,13 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {useField, useForm} from 'vee-validate'
 import * as yup from 'yup';
 import {maxFileSize, maxFileSizeError, requiredError} from '~/constants/form';
-import {validateFileArray} from '~/services/utils';
+import {serializeNonPOJOs, validateFileArray} from '~/services/utils';
+import {DBPathHelper} from "~/services/db-helper";
+import {IEstate, Estate} from "~/models/estate";
 
 definePageMeta({
   layout: 'admin'
@@ -191,15 +193,22 @@ const city = useField('city');
 const address = useField('address');
 const latitude = useField('latitude');
 const longitude = useField('longitude');
-const typeOfFinish = useField('typeOfFinish');
+const finishingTypes = useField('finishingTypes');
 const type = useField('type');
 
 const route = useRoute();
-const { data } = await useAsyncData('catalog', () => $fetch('/api/catalog'));
-const catalogItem = JSON.parse(JSON.stringify(data.value))[route.query.id - 1];
+const runtimeConfig = useRuntimeConfig();
+const path = DBPathHelper.getEstatesPath(runtimeConfig.public.apiHost, route.query.id as string);
+const {data: estate, error} = await useFetch<IEstate>(path);
 
-if (catalogItem) {
-  resetForm({ values: {...catalogItem} })
+if (error.value) {
+  //TODO add error notification
+  console.log(error.value.data)
+}
+
+if (estate.value) {
+  const estateValues = serializeNonPOJOs(estate.value);
+  resetForm({ values: {...estateValues} })
 }
 
 const submit = handleSubmit(values => {

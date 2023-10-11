@@ -28,11 +28,6 @@
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink to="maps">
-            <v-btn variant="plain">map</v-btn>
-          </NuxtLink>
-        </li>
-        <li>
           <NuxtLink to="about">
             <v-btn variant="plain">about</v-btn>
           </NuxtLink>

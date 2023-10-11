@@ -6,3 +6,7 @@ export const validateFileArray = (items: File[], size: number) => {
         return acc
     }, false)
 };
+
+export const serializeNonPOJOs = (value: object | null) => {
+    return JSON.parse(JSON.stringify(value));
+};

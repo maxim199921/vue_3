@@ -2,7 +2,7 @@
   <div class="pb-32">
     <v-carousel class="carousel" hide-delimiters>
       <v-carousel-item
-        v-for="(item,i) in [
+          v-for="(item,i) in [
           {
             src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
           },
@@ -16,9 +16,9 @@
             src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
           },
         ]"
-        :key="i"
-        :src="item.src"
-        cover
+          :key="i"
+          :src="item.src"
+          cover
       ></v-carousel-item>
     </v-carousel>
   </div>
@@ -32,12 +32,12 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {DBPathHelper} from "~/services/db-helper";
 
 const runtimeConfig = useRuntimeConfig();
 
-console.log(DBPathHelper.getCatalogPath(runtimeConfig.public.apiHost));
+console.log(DBPathHelper.getEstatesPath(runtimeConfig.public.apiHost));
 </script>
 
 <style scoped lang="scss">

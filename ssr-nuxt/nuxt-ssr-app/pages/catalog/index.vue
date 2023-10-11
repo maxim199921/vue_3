@@ -3,16 +3,16 @@
     <the-main-filters></the-main-filters>
   </div>
   <div class="wrapper">
-    <template v-for="(catalog, index) in catalogs">
+    <template v-for="(estate, index) in estates">
       <v-card class="card">
         <v-img
-          :src="catalog.url"
+          :src="estate.url || 'https://cdn.vuetifyjs.com/images/cards/docks.jpg'"
           class="align-end text-white card-img"
           height="200"
           width="400"
           cover
         >
-          <v-card-title>{{ catalog.name }}</v-card-title>
+          <v-card-title>{{ estate.name }}</v-card-title>
         </v-img>
 
         <v-card-subtitle class="pt-4">
@@ -20,13 +20,13 @@
         </v-card-subtitle>
 
         <v-card-text>
-          <div class="description">{{ catalog.description }}</div>
+          <div class="description">{{ estate.description }}</div>
 
-          <div class="price">price: {{ catalog.price }}</div>
+          <div class="price">price: {{ estate.price }}</div>
         </v-card-text>
 
         <v-card-actions>
-          <NuxtLink :to="`/catalog/${catalog.id}`">
+          <NuxtLink :to="`/catalog/${estate.id}`">
             <v-btn color="orange">
               Explore
             </v-btn>
@@ -37,10 +37,19 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import TheMainFilters from "~/components/TheMainFilters.vue";
+import {DBPathHelper} from "~/services/db-helper";
+import {IEstate} from "~/models/estate";
 
-const {data: catalogs} = useAsyncData('catalog', () => $fetch('/api/catalog'));
+const runtimeConfig = useRuntimeConfig();
+const path = DBPathHelper.getEstatesPath(runtimeConfig.public.apiHost);
+const {data: estates, error} = await useFetch<IEstate[]>(path);
+
+if (error.value) {
+  //TODO add error notification
+  console.log(error.value.data)
+}
 </script>
 
 <style scoped lang="scss">
