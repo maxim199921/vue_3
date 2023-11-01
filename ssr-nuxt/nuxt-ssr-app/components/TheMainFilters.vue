@@ -7,6 +7,7 @@
             type="number"
             label="Square From"
             typevariant="underlined"
+            :error-messages="squareF.errorMessage.value"
             @change="onChangeForm()"
         ></v-text-field>
         <v-text-field
@@ -14,6 +15,7 @@
             type="number"
             label="Square To"
             typevariant="underlined"
+            :error-messages="squareT.errorMessage.value"
             @change="onChangeForm()"
         ></v-text-field>
       </div>
@@ -29,6 +31,7 @@
             type="number"
             label="Price From"
             typevariant="underlined"
+            :error-messages="priceF.errorMessage.value"
             @change="onChangeForm()"
         ></v-text-field>
         <v-text-field
@@ -36,6 +39,7 @@
             type="number"
             label="Price To"
             typevariant="underlined"
+            :error-messages="priceT.errorMessage.value"
             @change="onChangeForm()"
         ></v-text-field>
       </div>
@@ -45,6 +49,7 @@
             type="number"
             label="Floor From"
             typevariant="underlined"
+            :error-messages="floorF.errorMessage.value"
             @change="onChangeForm()"
         ></v-text-field>
         <v-text-field
@@ -52,6 +57,7 @@
             type="number"
             label="Floor To"
             typevariant="underlined"
+            :error-messages="floorT.errorMessage.value"
             @change="onChangeForm()"
         ></v-text-field>
       </div>
@@ -61,6 +67,7 @@
             type="number"
             label="Bedroom From"
             typevariant="underlined"
+            :error-messages="bedroomF.errorMessage.value"
             @change="onChangeForm()"
         ></v-text-field>
         <v-text-field
@@ -68,6 +75,7 @@
             type="number"
             label="Bedroom To"
             typevariant="underlined"
+            :error-messages="bedroomT.errorMessage.value"
             @change="onChangeForm()"
         ></v-text-field>
       </div>
@@ -77,6 +85,7 @@
             type="number"
             label="Bathroom From"
             typevariant="underlined"
+            :error-messages="bathroomF.errorMessage.value"
             @change="onChangeForm()"
         ></v-text-field>
         <v-text-field
@@ -84,6 +93,7 @@
             type="number"
             label="Bathroom To"
             typevariant="underlined"
+            :error-messages="bathroomT.errorMessage.value"
             @change="onChangeForm()"
         ></v-text-field>
       </div>
@@ -154,9 +164,10 @@ import {cityItemsArray} from "~/models/city";
 import {finishingTypesItemsArray} from "~/models/finishingTypes";
 import {FiltersEstate, IFiltersEstate} from "~/models/filters";
 import {getTypesItemsLocale} from "~/services/utils";
-import {cloneDeep} from "lodash";
+import {cloneDeep, isEmpty} from "lodash";
 import {typesItemsArray} from "~/models/estateTypes";
 import {defineEmits, ref} from "vue";
+import {checkOptionalField, lessThanError, moreThanError} from "~/constants/form";
 
 const cityItems = ref(cityItemsArray);
 const finishingTypesItems = ref(finishingTypesItemsArray);
@@ -168,22 +179,57 @@ const emit = defineEmits(['filtersData']);
 
 const validationSchema = yup.object({
   currency: yup.string(),
-  squareF: yup.number(),
-  squareT: yup.number(),
-  priceF: yup.number(),
-  priceT: yup.number(),
-  floorF: yup.number(),
-  floorT: yup.number(),
-  bedroomF: yup.number(),
-  bedroomT: yup.number(),
-  bathroomF: yup.number(),
-  bathroomT: yup.number(),
+  squareF: yup.number().nullable().transform(checkOptionalField).integer().positive().max(1000)
+      .when('squareT', (squareT, schema) => {
+        if (+squareT) {
+          return schema.lessThan(+squareT, lessThanError('squareTo', 'squareFrom'))
+        }
+        return schema
+      }),
+  squareT: yup.number().nullable().transform(checkOptionalField).positive().max(1000)
+      .moreThan(yup.ref('squareF'), moreThanError('squareTo', 'squareFrom')),
+  priceF: yup.number().nullable().transform(checkOptionalField).positive().max(10000000)
+      .when('priceT', (priceT, schema) => {
+        if (+priceT) {
+          return schema.lessThan(+priceT, lessThanError('priceTo', 'priceFrom'))
+        }
+        return schema
+      }),
+  priceT: yup.number().nullable().transform(checkOptionalField).positive().max(10000000)
+      .moreThan(yup.ref('priceF'), moreThanError('priceTo', 'priceFrom')),
+  floorF: yup.number().nullable().transform(checkOptionalField).positive().max(50)
+      .when('floorT', (floorT, schema) => {
+        if (+floorT) {
+          return schema.lessThan(+floorT, lessThanError('floorTo', 'floorFrom'))
+        }
+        return schema
+      }),
+  floorT: yup.number().nullable().transform(checkOptionalField).positive().max(50)
+      .moreThan(yup.ref('floorF'), moreThanError('floorTo', 'floorFrom')),
+  bedroomF: yup.number().nullable().transform(checkOptionalField).positive().max(10)
+      .when('bedroomT', (bedroomT, schema) => {
+        if (+bedroomT) {
+          return schema.lessThan(+bedroomT, lessThanError('bedroomTo', 'bedroomFrom'))
+        }
+        return schema
+      }),
+  bedroomT: yup.number().nullable().transform(checkOptionalField).positive().max(10)
+      .moreThan(yup.ref('bedroomF'), moreThanError('bedroomTo', 'bedroomFrom')),
+  bathroomF: yup.number().nullable().transform(checkOptionalField).positive().max(5)
+      .when('bathroomT', (bathroomT, schema) => {
+        if (+bathroomT) {
+          return schema.lessThan(+bathroomT, lessThanError('bathroomTo', 'bathroomFrom'))
+        }
+        return schema
+      }),
+  bathroomT: yup.number().nullable().transform(checkOptionalField).positive().max(5)
+      .moreThan(yup.ref('bathroomF'), moreThanError('bathroomTo', 'bathroomFrom')),
   cities: yup.array(),
   finishingTypes: yup.array(),
   types: yup.array(),
 });
 
-const {handleSubmit, resetForm, values} = useForm({
+const {handleSubmit, resetForm, values, errors} = useForm({
   validationSchema,
 })
 
@@ -215,8 +261,9 @@ if (filterInitialValues) {
 const onChangeForm = () => {
   const getFilterData = new FiltersEstate((cloneDeep(values)) as IFiltersEstate);
 
-  console.log(getFilterData);
-  emit('filtersData', getFilterData);
+  if (isEmpty(errors.value)) {
+    emit('filtersData', getFilterData);
+  }
 }
 
 </script>
