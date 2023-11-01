@@ -1,6 +1,6 @@
 <template>
   <div class="basic-filters">
-    <form class="form d-flex-center-between" @submit.prevent="submit" ref="myForm">
+    <form class="form d-flex-center-between">
       <div class="square">
         <v-text-field
             v-model="squareF.value.value"
@@ -91,6 +91,8 @@
         <v-select
             multiple
             v-model="cities.value.value"
+            item-title="value"
+            item-value="key"
             label="City"
             :items="cityItems"
             @update:modelValue="onChangeForm()"
@@ -100,6 +102,8 @@
         <v-select
             multiple
             v-model="finishingTypes.value.value"
+            item-title="value"
+            item-value="key"
             label="Type of finish"
             :items="finishingTypesItems"
             @update:modelValue="onChangeForm()"
@@ -109,8 +113,10 @@
         <v-select
             multiple
             v-model="types.value.value"
+            item-title="value"
+            item-value="key"
             label="Objects type"
-            :items="typesItems"
+            :items="getTypesItemsLocale(typesItems, $t)"
             @update:modelValue="onChangeForm()"
         ></v-select>
       </div>
@@ -147,13 +153,16 @@ import {useField, useForm} from "vee-validate";
 import {cityItemsArray} from "~/models/city";
 import {finishingTypesItemsArray} from "~/models/finishingTypes";
 import {FiltersEstate, IFiltersEstate} from "~/models/filters";
+import {getTypesItemsLocale} from "~/services/utils";
 import {cloneDeep} from "lodash";
 import {typesItemsArray} from "~/models/estateTypes";
-import {defineEmits} from "vue/dist/vue";
+import {defineEmits, ref} from "vue";
 
 const cityItems = ref(cityItemsArray);
 const finishingTypesItems = ref(finishingTypesItemsArray);
 const typesItems = ref(typesItemsArray);
+
+const cookieFilters = useCookie<FiltersEstate>('filters');
 
 const emit = defineEmits(['filtersData']);
 
@@ -174,7 +183,7 @@ const validationSchema = yup.object({
   types: yup.array(),
 });
 
-const {handleSubmit, values} = useForm({
+const {handleSubmit, resetForm, values} = useForm({
   validationSchema,
 })
 
@@ -193,9 +202,21 @@ const cities = useField('cities');
 const finishingTypes = useField('finishingTypes');
 const types = useField('types');
 
+const filterInitialValues = cloneDeep(cookieFilters.value);
+
+if (filterInitialValues) {
+  resetForm({
+    values: {
+      ...filterInitialValues
+    }
+  })
+}
+
 const onChangeForm = () => {
   const getFilterData = new FiltersEstate((cloneDeep(values)) as IFiltersEstate);
 
+  console.log(getFilterData);
   emit('filtersData', getFilterData);
 }
+
 </script>

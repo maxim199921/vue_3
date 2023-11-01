@@ -1,4 +1,4 @@
-import {City, cityKey} from "~/models/city";
+import {Cities} from "~/models/city";
 import {isNumber} from "lodash";
 import {FinishingTypes, finishingTypesKey} from "~/models/finishingTypes";
 import {Types, typesKey} from "~/models/estateTypes";
@@ -10,12 +10,12 @@ export interface IFiltersEstate {
     priceT: number | null,
     floorF: number | null,
     floorT: number | null,
-    cities: City[]
+    cities: Cities[]
     bedroomF: number | null,
     bedroomT: number | null,
     bathroomF: number | null,
     bathroomT: number | null,
-    finishingTypes:  FinishingTypes[],
+    finishingTypes: FinishingTypes[],
     types: Types[],
 }
 
@@ -26,13 +26,13 @@ export class FiltersEstate {
     priceT: number | null;
     floorF: number | null;
     floorT: number | null;
-    cities: string[];
+    cities: Cities[];
     bedroomF: number | null;
     bedroomT: number | null;
     bathroomF: number | null;
     bathroomT: number | null;
-    finishingTypes: string[];
-    types: string[];
+    finishingTypes: FinishingTypes[];
+    types: Types[];
 
     constructor(filters?: IFiltersEstate) {
         this.squareF = (filters?.squareF && isNumber(+filters.squareF)) ? +filters.squareF : null;
@@ -41,13 +41,13 @@ export class FiltersEstate {
         this.priceT = (filters?.priceT && isNumber(+filters.priceT)) ? +filters.priceT : null;
         this.floorF = (filters?.floorF && isNumber(+filters.floorF)) ? +filters.floorF : null;
         this.floorT = (filters?.floorT && isNumber(+filters.floorT)) ? +filters.floorT : null;
-        this.cities = filters?.cities?.map((value: City) => cityKey[value]) ?? [];
+        this.cities = filters?.cities ?? [];
         this.bedroomF = (filters?.bedroomF && isNumber(+filters.bedroomF)) ? +filters.bedroomF : null;
         this.bedroomT = (filters?.bedroomT && isNumber(+filters.bedroomT)) ? +filters.bedroomT : null;
         this.bathroomF = (filters?.bathroomF && isNumber(+filters.bathroomF)) ? +filters.bathroomF : null;
         this.bathroomT = (filters?.bathroomT && isNumber(+filters.bathroomT)) ? +filters.bathroomT : null;
-        this.finishingTypes = filters?.finishingTypes?.map((value: FinishingTypes) => finishingTypesKey[value]) ?? [];
-        this.types = filters?.types?.map((value: Types) => typesKey[value]) ?? [];
+        this.finishingTypes = filters?.finishingTypes ?? [];
+        this.types = filters?.types ?? [];
     }
 
     createSerializableObject(): Record<string, unknown> {

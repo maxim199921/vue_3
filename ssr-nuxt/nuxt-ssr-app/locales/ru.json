@@ -1,4 +1,7 @@
 {
   "hello": "Привет, {name}!",
-  "language": "Язык"
+  "language": "Язык",
+  "Townhouse": "Таун хаус",
+  "Houses": "Дома",
+  "Apartments": "Квартиры"
 }

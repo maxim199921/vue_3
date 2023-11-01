@@ -152,7 +152,7 @@ import * as yup from 'yup';
 import {maxFileSize, maxFileSizeError, requiredError} from '~/constants/form';
 import {serializeNonPOJOs, validateFileArray} from '~/services/utils';
 import {DBPathHelper} from "~/services/db-helper";
-import {IEstate, Estate} from "~/models/estate";
+import {IEstate} from "~/models/estate";
 
 definePageMeta({
   layout: 'admin'
@@ -208,7 +208,7 @@ if (error.value) {
 
 if (estate.value) {
   const estateValues = serializeNonPOJOs(estate.value);
-  resetForm({ values: {...estateValues} })
+  resetForm({values: {...estateValues}})
 }
 
 const submit = handleSubmit(values => {

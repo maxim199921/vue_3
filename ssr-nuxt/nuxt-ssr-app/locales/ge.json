@@ -1,4 +1,7 @@
 {
   "hello": "გამარჯობა, {name}!",
-  "language": "ენა"
+  "language": "ენა",
+  "Townhouse": "ენა",
+  "Houses": "გამარჯობა",
+  "Apartments": "ენა გამარჯობა"
 }

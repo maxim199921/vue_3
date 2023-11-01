@@ -1,11 +1,20 @@
-export enum City {
+export enum Cities {
     BATUMI = 'Batumi',
     TBILICY = 'Tbilicy',
 }
 
 export const cityKey = {
-    [City.BATUMI]: 'BAT',
-    [City.TBILICY]: 'TBI',
+    [Cities.BATUMI]: 'BATUMI',
+    [Cities.TBILICY]: 'TBILICY',
 };
 
-export const cityItemsArray = [City.BATUMI, City.TBILICY];
+export const cityItemsArray = [
+    {
+        key: cityKey[Cities.BATUMI],
+        value: Cities.BATUMI
+    },
+    {
+        key: cityKey[Cities.TBILICY],
+        value: Cities.TBILICY
+    },
+];

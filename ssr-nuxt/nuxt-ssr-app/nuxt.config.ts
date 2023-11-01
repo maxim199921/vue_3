@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  ssr: true,
   app: {
     head: {
       charset: 'utf-8',
@@ -9,7 +10,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify', 'vue-tel-input', '@fawmi/vue-google-maps'],
   },
-  modules: ["nuxt-lodash"],
+  modules: ['nuxt-lodash'],
   css: [
     'vuetify/lib/styles/main.sass',
     '@mdi/font/css/materialdesignicons.min.css',

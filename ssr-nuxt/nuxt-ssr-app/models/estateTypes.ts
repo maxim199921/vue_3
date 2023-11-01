@@ -10,4 +10,17 @@ export const typesKey = {
     [Types.APARTMENTS]: 'APARTMENTS',
 };
 
-export const typesItemsArray = [Types.TOWNHOUSE, Types.HOUSES, Types.APARTMENTS];
+export const typesItemsArray = [
+    {
+        key: typesKey[Types.TOWNHOUSE],
+        value: Types.TOWNHOUSE
+    },
+    {
+        key: typesKey[Types.HOUSES],
+        value: Types.HOUSES
+    },
+    {
+        key: typesKey[Types.APARTMENTS],
+        value: Types.APARTMENTS
+    },
+];

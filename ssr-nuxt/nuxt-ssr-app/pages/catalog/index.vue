@@ -50,13 +50,14 @@ import {cloneDeep} from "lodash";
 const runtimeConfig = useRuntimeConfig();
 const path = DBPathHelper.getSearchEstatesPath(runtimeConfig.public.apiHost);
 const state = reactive({items: [] as IEstate[]});
+const cookieFilters = useCookie<FiltersEstate>('filters');
 
 const getEstates = async (filters?: FiltersEstate) => {
-  //TODO get estates from store;
-  //TODO if no estates from store get filters from session storage and request estates;
-  const filtersData = filters || new FiltersEstate();
-  console.log(filtersData);
+  const filtersData = filters
+      || cloneDeep(cookieFilters.value)
+      || new FiltersEstate();
 
+  //TODO get estates from store;
   const {data, error} = await useFetch<IEstate[]>(path, {
     method: 'POST',
     headers: {
@@ -76,7 +77,7 @@ const getEstates = async (filters?: FiltersEstate) => {
 }
 
 const updateFiltersData = (data: FiltersEstate) => {
-  //TODO set filters to store + sessionStorage
+  cookieFilters.value = data;
   getEstates(data);
 }
 
