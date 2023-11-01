@@ -1,16 +1,18 @@
 <template>
   <div class="filters">
-    <the-main-filters></the-main-filters>
+    <the-main-filters
+        @filtersData="updateFiltersData($event)"
+    ></the-main-filters>
   </div>
   <div class="wrapper">
-    <template v-for="(estate, index) in estates">
+    <template v-for="(estate, index) in state.items">
       <v-card class="card">
         <v-img
-          :src="estate.url || 'https://cdn.vuetifyjs.com/images/cards/docks.jpg'"
-          class="align-end text-white card-img"
-          height="200"
-          width="400"
-          cover
+            :src="estate.url || 'https://cdn.vuetifyjs.com/images/cards/docks.jpg'"
+            class="align-end text-white card-img"
+            height="200"
+            width="400"
+            cover
         >
           <v-card-title>{{ estate.name }}</v-card-title>
         </v-img>
@@ -41,15 +43,44 @@
 import TheMainFilters from "~/components/TheMainFilters.vue";
 import {DBPathHelper} from "~/services/db-helper";
 import {IEstate} from "~/models/estate";
+import {FiltersEstate} from "~/models/filters";
+import {reactive} from 'vue'
+import {cloneDeep} from "lodash";
 
 const runtimeConfig = useRuntimeConfig();
-const path = DBPathHelper.getEstatesPath(runtimeConfig.public.apiHost);
-const {data: estates, error} = await useFetch<IEstate[]>(path);
+const path = DBPathHelper.getSearchEstatesPath(runtimeConfig.public.apiHost);
+const state = reactive({items: [] as IEstate[]});
 
-if (error.value) {
-  //TODO add error notification
-  console.log(error.value.data)
+const getEstates = async (filters?: FiltersEstate) => {
+  //TODO get estates from store;
+  //TODO if no estates from store get filters from session storage and request estates;
+  const filtersData = filters || new FiltersEstate();
+  console.log(filtersData);
+
+  const {data, error} = await useFetch<IEstate[]>(path, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: {
+      ...filtersData
+    },
+  })
+
+  state.items = cloneDeep(data.value) as IEstate[];
+
+  if (error.value) {
+    //TODO add error notification
+    console.log(error.value)
+  }
 }
+
+const updateFiltersData = (data: FiltersEstate) => {
+  //TODO set filters to store + sessionStorage
+  getEstates(data);
+}
+
+await getEstates();
 </script>
 
 <style scoped lang="scss">

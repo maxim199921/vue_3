@@ -23,12 +23,12 @@
 <script setup lang="ts">
 import {defineEmits, ref, reactive} from 'vue'
 
-const emit = defineEmits(['coordinates'])
+const emit = defineEmits(['coordinates']);
 const center = ref(
-  {
-    lat: 41.63196116119842,
-    lng: 41.623328379664116
-  }
+    {
+      lat: 41.63196116119842,
+      lng: 41.623328379664116
+    }
 );
 let markers = reactive([
   {
@@ -42,12 +42,12 @@ let markers = reactive([
 const setCoordinates = (event: any) => {
   const lat = event.latLng.lat();
   const lng = event.latLng.lng();
-  markers[0] =  {
+  markers[0] = {
     position: {
       lat,
       lng,
     },
-  },
+  };
   emit('coordinates', {lat, lng});
 }
 </script>

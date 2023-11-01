@@ -9,6 +9,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify', 'vue-tel-input', '@fawmi/vue-google-maps'],
   },
+  modules: ["nuxt-lodash"],
   css: [
     'vuetify/lib/styles/main.sass',
     '@mdi/font/css/materialdesignicons.min.css',

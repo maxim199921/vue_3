@@ -1,18 +1,20 @@
 <template>
   <div class="basic-filters">
-    <form class="form d-flex-center-between" @submit.prevent="submit">
+    <form class="form d-flex-center-between" @submit.prevent="submit" ref="myForm">
       <div class="square">
         <v-text-field
-            v-model="squareFrom.value.value"
+            v-model="squareF.value.value"
             type="number"
             label="Square From"
             typevariant="underlined"
+            @change="onChangeForm()"
         ></v-text-field>
         <v-text-field
-            v-model="squareTo.value.value"
+            v-model="squareT.value.value"
             type="number"
             label="Square To"
             typevariant="underlined"
+            @change="onChangeForm()"
         ></v-text-field>
       </div>
       <div class="price">
@@ -20,82 +22,98 @@
             v-model="currency.value.value"
             label="Currency"
             :items="['Dollar US', 'EURO', 'GEL']"
+            @change="onChangeForm()"
         ></v-select>
         <v-text-field
-            v-model="priceFrom.value.value"
+            v-model="priceF.value.value"
             type="number"
             label="Price From"
             typevariant="underlined"
+            @change="onChangeForm()"
         ></v-text-field>
         <v-text-field
-            v-model="priceTo.value.value"
+            v-model="priceT.value.value"
             type="number"
             label="Price To"
             typevariant="underlined"
+            @change="onChangeForm()"
         ></v-text-field>
       </div>
       <div class="floor">
         <v-text-field
-            v-model="floorFrom.value.value"
+            v-model="floorF.value.value"
             type="number"
             label="Floor From"
             typevariant="underlined"
+            @change="onChangeForm()"
         ></v-text-field>
         <v-text-field
-            v-model="floorTo.value.value"
+            v-model="floorT.value.value"
             type="number"
             label="Floor To"
             typevariant="underlined"
+            @change="onChangeForm()"
         ></v-text-field>
       </div>
       <div class="bedroom">
-        <v-select
-            multiple
-            v-model="bedroom.value.value"
-            label="Bedroom"
-            :items="[1, 2, 3]"
-        ></v-select>
+        <v-text-field
+            v-model="bedroomF.value.value"
+            type="number"
+            label="Bedroom From"
+            typevariant="underlined"
+            @change="onChangeForm()"
+        ></v-text-field>
+        <v-text-field
+            v-model="bedroomT.value.value"
+            type="number"
+            label="Bedroom To"
+            typevariant="underlined"
+            @change="onChangeForm()"
+        ></v-text-field>
       </div>
       <div class="bathroom">
-        <v-select
-            multiple
-            v-model="bathroom.value.value"
-            label="Bathroom"
-            :items="[1, 2, 3]"
-        ></v-select>
+        <v-text-field
+            v-model="bathroomF.value.value"
+            type="number"
+            label="Bathroom From"
+            typevariant="underlined"
+            @change="onChangeForm()"
+        ></v-text-field>
+        <v-text-field
+            v-model="bathroomT.value.value"
+            type="number"
+            label="Bathroom To"
+            typevariant="underlined"
+            @change="onChangeForm()"
+        ></v-text-field>
       </div>
       <div class="city">
         <v-select
             multiple
-            v-model="city.value.value"
+            v-model="cities.value.value"
             label="City"
-            :items="['Batumi', 'Tbilisi']"
+            :items="cityItems"
+            @update:modelValue="onChangeForm()"
         ></v-select>
       </div>
       <div class="type-of-finish">
         <v-select
             multiple
-            v-model="typeOfFinish.value.value"
+            v-model="finishingTypes.value.value"
             label="Type of finish"
-            :items="['white frame', 'black frame', 'green frame', 'turnkey finishing']"
+            :items="finishingTypesItems"
+            @update:modelValue="onChangeForm()"
         ></v-select>
       </div>
       <div class="objects-type">
         <v-select
             multiple
-            v-model="objectsType.value.value"
+            v-model="types.value.value"
             label="Objects type"
-            :items="['Townhouse', 'Houses', 'Apartments']"
+            :items="typesItems"
+            @update:modelValue="onChangeForm()"
         ></v-select>
       </div>
-      <v-btn
-          class="me-4"
-          type="submit"
-          color="black"
-          text="Submit"
-      >
-        search
-      </v-btn>
     </form>
   </div>
 </template>
@@ -125,41 +143,59 @@
 
 <script setup lang="ts">
 import * as yup from "yup";
-import { useField, useForm } from "vee-validate";
+import {useField, useForm} from "vee-validate";
+import {cityItemsArray} from "~/models/city";
+import {finishingTypesItemsArray} from "~/models/finishingTypes";
+import {FiltersEstate, IFiltersEstate} from "~/models/filters";
+import {cloneDeep} from "lodash";
+import {typesItemsArray} from "~/models/estateTypes";
+import {defineEmits} from "vue/dist/vue";
+
+const cityItems = ref(cityItemsArray);
+const finishingTypesItems = ref(finishingTypesItemsArray);
+const typesItems = ref(typesItemsArray);
+
+const emit = defineEmits(['filtersData']);
 
 const validationSchema = yup.object({
   currency: yup.string(),
-  squareFrom: yup.number(),
-  squareTo: yup.number(),
-  priceFrom: yup.number(),
-  priceTo: yup.number(),
-  floorFrom: yup.number(),
-  floorTo: yup.number(),
-  bedroom: yup.array(),
-  bathroom: yup.array(),
-  city: yup.array(),
-  typeOfFinish: yup.array(),
-  objectsType: yup.array(),
+  squareF: yup.number(),
+  squareT: yup.number(),
+  priceF: yup.number(),
+  priceT: yup.number(),
+  floorF: yup.number(),
+  floorT: yup.number(),
+  bedroomF: yup.number(),
+  bedroomT: yup.number(),
+  bathroomF: yup.number(),
+  bathroomT: yup.number(),
+  cities: yup.array(),
+  finishingTypes: yup.array(),
+  types: yup.array(),
 });
 
-const { handleSubmit } = useForm({
+const {handleSubmit, values} = useForm({
   validationSchema,
 })
 
 const currency = useField('currency');
-const squareFrom = useField('squareFrom');
-const squareTo = useField('squareTo');
-const priceFrom = useField('priceFrom');
-const priceTo = useField('priceTo');
-const floorFrom = useField('floorFrom');
-const floorTo = useField('floorTo');
-const bedroom = useField('bedroom');
-const bathroom = useField('bathroom');
-const city = useField('city');
-const typeOfFinish = useField('typeOfFinish');
-const objectsType = useField('objectsType');
+const squareF = useField('squareF');
+const squareT = useField('squareT');
+const priceF = useField('priceF');
+const priceT = useField('priceT');
+const floorF = useField('floorF');
+const floorT = useField('floorT');
+const bedroomF = useField('bedroomF');
+const bedroomT = useField('bedroomT');
+const bathroomF = useField('bathroomF');
+const bathroomT = useField('bathroomT');
+const cities = useField('cities');
+const finishingTypes = useField('finishingTypes');
+const types = useField('types');
 
-const submit = handleSubmit(values => {
-  console.log(values);
-})
+const onChangeForm = () => {
+  const getFilterData = new FiltersEstate((cloneDeep(values)) as IFiltersEstate);
+
+  emit('filtersData', getFilterData);
+}
 </script>

@@ -157,7 +157,7 @@ import {useField, useForm} from 'vee-validate'
 import * as yup from 'yup';
 import {maxFileSize, maxFileSizeError, requiredError} from '~/constants/form';
 import {validateFileArray} from '~/services/utils';
-import {Estate} from "~/models/estate";
+import {Estate, IEstate} from "~/models/estate";
 import {DBPathHelper} from "~/services/db-helper";
 
 definePageMeta({
@@ -206,12 +206,12 @@ const type = useField('type');
 const submit = handleSubmit(async values => {
   //TODO add loader to btn and type-of-finish add key
   const runtimeConfig = useRuntimeConfig();
-  const estate = new Estate(values);
+  const estate = new Estate(values as IEstate);
   const path = DBPathHelper.getEstatesPath(runtimeConfig.public.apiHost);
   const {data, error} = await useFetch(path, {
     method: 'POST',
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json'
     },
     body: {
       ...estate
@@ -230,7 +230,7 @@ const submit = handleSubmit(async values => {
   }
 })
 
-const setCoordinates = ({lat, lng}: {lat: string, lng: string}) => {
+const setCoordinates = ({lat, lng}: { lat: string, lng: string }) => {
   latitude.setValue(lat);
   longitude.setValue(lng);
 }

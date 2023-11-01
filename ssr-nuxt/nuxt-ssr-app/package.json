@@ -13,6 +13,7 @@
     "@nuxt/devtools": "latest",
     "@nuxt/typescript-build": "^3.0.1",
     "nuxt": "^3.7.0",
+    "nuxt-lodash": "^2.5.3",
     "vue-i18n": "^9.3.0"
   },
   "dependencies": {
