@@ -158,6 +158,8 @@ definePageMeta({
   layout: 'admin'
 })
 
+const snackbar = useSnackbar();
+
 const validationSchema = yup.object({
   images: yup.array().nullable().required().test('is-valid-size', maxFileSizeError,
       fileItems => validateFileArray(fileItems, maxFileSize)
@@ -202,8 +204,10 @@ const path = DBPathHelper.getEstatesPath(runtimeConfig.public.apiHost, route.que
 const {data: estate, error} = await useFetch<IEstate>(path);
 
 if (error.value) {
-  //TODO add error notification
-  console.log(error.value.data)
+  snackbar.add({
+    type: 'error',
+    text: 'An error has occurred, failed to fetch estate'
+  })
 }
 
 if (estate.value) {

@@ -12,7 +12,7 @@
     </NuxtLink>
   </div>
   <div class="wrapper pb-40">
-    <template v-for="(estate, index) in estates">
+    <template v-for="(estate, index) in estates?.content">
       <v-card class="card">
         <v-img
             :src="estate.url || 'https://cdn.vuetifyjs.com/images/cards/docks.jpg'"
@@ -55,12 +55,15 @@ definePageMeta({
 })
 
 const runtimeConfig = useRuntimeConfig();
+const snackbar = await useSnackbar();
 const path = DBPathHelper.getEstatesPath(runtimeConfig.public.apiHost);
-const {data: estates, error} = await useFetch<IEstate[]>(path);
+const {data: estates, error} = await useFetch<{content: IEstate[]}>(path);
 
 if (error.value) {
-  //TODO add error notification
-  console.log(error.value.data)
+  snackbar.add({
+    type: 'error',
+    text: 'An error has occurred, failed to fetch estates'
+  })
 }
 </script>
 

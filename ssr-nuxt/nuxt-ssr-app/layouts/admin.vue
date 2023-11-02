@@ -2,6 +2,7 @@
     <div class="container">
         <slot />
     </div>
+  <NuxtSnackbar />
 </template>
 
 <style lang="scss" scoped>

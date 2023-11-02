@@ -51,6 +51,7 @@ const runtimeConfig = useRuntimeConfig();
 const path = DBPathHelper.getSearchEstatesPath(runtimeConfig.public.apiHost);
 const state = reactive({items: [] as IEstate[]});
 const cookieFilters = useCookie<FiltersEstate>('filters');
+const snackbar = useSnackbar();
 
 const getEstates = async (filters?: FiltersEstate) => {
   const filtersData = filters
@@ -71,8 +72,10 @@ const getEstates = async (filters?: FiltersEstate) => {
   state.items = cloneDeep(data.value) as IEstate[];
 
   if (error.value) {
-    //TODO add error notification
-    console.log(error.value)
+    snackbar.add({
+      type: 'error',
+      text: 'An error has occurred, failed to fetch estates'
+    })
   }
 }
 

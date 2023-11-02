@@ -10,6 +10,7 @@
 
       <TheFooter />
     </div>
+  <NuxtSnackbar />
 </template>
 
 <style lang="scss" scoped>

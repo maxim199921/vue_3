@@ -81,9 +81,11 @@
         <div class="city">
           <v-select
               v-model="city.value.value"
-              :error-messages="city.errorMessage.value"
+              item-title="value"
+              item-value="key"
               label="City"
-              :items="['Batumi', 'Tbilisi']"
+              :items="cityItemsArray"
+              :error-messages="city.errorMessage.value"
           ></v-select>
         </div>
         <div class="address">
@@ -100,17 +102,21 @@
               multiple
               data-vv-rules="required"
               v-model="finishingTypes.value.value"
-              :error-messages="finishingTypes.errorMessage.value"
+              item-title="value"
+              item-value="key"
               label="Type of finish"
-              :items="['WHITE_FRAME', 'BLACK_FRAME', 'GREEN_FRAME']"
+              :items="finishingTypesItems"
+              :error-messages="finishingTypes.errorMessage.value"
           ></v-select>
         </div>
         <div class="objects-type">
           <v-select
               v-model="type.value.value"
-              :error-messages="type.errorMessage.value"
+              item-title="value"
+              item-value="key"
               label="Object Type"
-              :items="['Townhouse', 'Houses', 'Apartments']"
+              :items="typesItems"
+              :error-messages="type.errorMessage.value"
           ></v-select>
         </div>
         <div class="google-maps w-100">
@@ -150,6 +156,8 @@
       </form>
     </v-sheet>
   </div>
+
+  <the-snack-bar></the-snack-bar>
 </template>
 
 <script setup lang="ts">
@@ -159,10 +167,20 @@ import {maxFileSize, maxFileSizeError, requiredError} from '~/constants/form';
 import {validateFileArray} from '~/services/utils';
 import {Estate, IEstate} from "~/models/estate";
 import {DBPathHelper} from "~/services/db-helper";
+import {ref} from "vue";
+import {cityItemsArray} from "~/models/city";
+import {finishingTypesItemsArray} from "~/models/finishingTypes";
+import {typesItemsArray} from "~/models/estateTypes";
 
 definePageMeta({
   layout: 'admin'
 })
+
+const cityItems = ref(cityItemsArray);
+const finishingTypesItems = ref(finishingTypesItemsArray);
+const typesItems = ref(typesItemsArray);
+
+const snackbar = useSnackbar();
 
 const validationSchema = yup.object({
   images: yup.array().nullable().required().test('is-valid-size', maxFileSizeError,
@@ -199,12 +217,11 @@ const city = useField('city');
 const address = useField('address');
 const latitude = useField('latitude');
 const longitude = useField('longitude');
-//TODO add enum
 const finishingTypes = useField('finishingTypes');
 const type = useField('type');
 
 const submit = handleSubmit(async values => {
-  //TODO add loader to btn and type-of-finish add key
+  //TODO add common loader;
   const runtimeConfig = useRuntimeConfig();
   const estate = new Estate(values as IEstate);
   const path = DBPathHelper.getEstatesPath(runtimeConfig.public.apiHost);
@@ -219,13 +236,17 @@ const submit = handleSubmit(async values => {
   })
 
   if (error.value) {
-    //TODO add error notification
-    console.log(error.value.data)
+    snackbar.add({
+      type: 'error',
+      text: 'An error has occurred, estate not saved'
+    })
   }
 
-  if (data) {
-    //TODO add success error notification with id
-    console.log(data.value);
+  if (data.value) {
+    snackbar.add({
+      type: 'success',
+      text: `Estate successfully saved with id: ${data.value}`
+    })
     resetForm();
   }
 })
