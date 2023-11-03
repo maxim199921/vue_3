@@ -81,7 +81,7 @@
 
 <script setup lang="ts">
 import * as yup from "yup";
-import { useField, useForm } from "vee-validate";
+import {useField, useForm} from "vee-validate";
 import {checkOptionalField, lessThanError, moreThanError} from "~/constants/form";
 import {FiltersEstate, IFiltersEstate} from "~/models/filters";
 

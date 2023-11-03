@@ -19,11 +19,18 @@
   </GMapMap>
 </template>
 
-
 <script setup lang="ts">
-import {defineEmits, ref, reactive} from 'vue'
+import {defineEmits, ref, reactive, toRaw} from 'vue'
+
+interface Props {
+  latitude?: number
+  longitude?: number
+}
+
+const props = defineProps<Props>()
 
 const emit = defineEmits(['coordinates']);
+
 const center = ref(
     {
       lat: 41.63196116119842,
@@ -33,8 +40,8 @@ const center = ref(
 let markers = reactive([
   {
     position: {
-      lat: 41.63196116119842,
-      lng: 41.623328379664116,
+      lat: toRaw(props.latitude) || 41.63196116119842,
+      lng: toRaw(props.longitude) || 41.623328379664116
     },
   },
 ]);
@@ -48,6 +55,7 @@ const setCoordinates = (event: any) => {
       lng,
     },
   };
+
   emit('coordinates', {lat, lng});
 }
 </script>

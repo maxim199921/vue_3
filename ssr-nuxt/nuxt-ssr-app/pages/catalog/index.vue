@@ -44,8 +44,7 @@ import TheMainFilters from "~/components/TheMainFilters.vue";
 import {DBPathHelper} from "~/services/db-helper";
 import {IEstate} from "~/models/estate";
 import {FiltersEstate} from "~/models/filters";
-import {reactive} from 'vue'
-import {cloneDeep} from "lodash";
+import {reactive, toRaw} from 'vue'
 
 const runtimeConfig = useRuntimeConfig();
 const path = DBPathHelper.getSearchEstatesPath(runtimeConfig.public.apiHost);
@@ -55,7 +54,7 @@ const snackbar = useSnackbar();
 
 const getEstates = async (filters?: FiltersEstate) => {
   const filtersData = filters
-      || cloneDeep(cookieFilters.value)
+      || toRaw(cookieFilters.value)
       || new FiltersEstate();
 
   //TODO get estates from store;
@@ -69,7 +68,7 @@ const getEstates = async (filters?: FiltersEstate) => {
     },
   })
 
-  state.items = cloneDeep(data.value) as IEstate[];
+  state.items = toRaw(data.value) as IEstate[];
 
   if (error.value) {
     snackbar.add({

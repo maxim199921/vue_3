@@ -21,7 +21,7 @@
         <div class="name">
           <v-text-field
               v-model="name.value.value"
-              :counter="10"
+              :counter="255"
               :error-messages="name.errorMessage.value"
               type="text"
               label="Name"
@@ -31,6 +31,7 @@
         <div class="description">
           <v-text-field
               v-model="description.value.value"
+              :counter="255"
               :error-messages="description.errorMessage.value"
               type="text"
               label="Description"
@@ -82,19 +83,51 @@
         <div class="city">
           <v-select
               v-model="city.value.value"
-              :error-messages="city.errorMessage.value"
+              item-title="value"
+              item-value="key"
               label="City"
-              :items="['Batumi', 'Tbilisi']"
+              :items="cityItems"
+              :error-messages="city.errorMessage.value"
           ></v-select>
         </div>
         <div class="address">
           <v-text-field
               v-model="address.value.value"
-              :error-messages="address.errorMessage.value"
               type="text"
-              label="Name"
+              label="Address"
               typevariant="underlined"
+              :error-messages="address.errorMessage.value"
           ></v-text-field>
+        </div>
+        <div class="type-of-finish">
+          <v-select
+              multiple
+              data-vv-rules="required"
+              v-model="finishingTypes.value.value"
+              item-title="value"
+              item-value="key"
+              label="Type of finish"
+              :items="finishingTypesItems"
+              :error-messages="finishingTypes.errorMessage.value"
+          ></v-select>
+        </div>
+        <div class="objects-type">
+          <v-select
+              v-model="type.value.value"
+              item-title="value"
+              item-value="key"
+              label="Object Type"
+              :items="typesItems"
+              :error-messages="type.errorMessage.value"
+          ></v-select>
+        </div>
+        <div class="google-maps w-100">
+          <the-google-map-coordinates
+              :latitude="latitudeValue"
+              :longitude="longitudeValue"
+              @coordinates="setCoordinates($event)"
+          >
+          </the-google-map-coordinates>
         </div>
         <div class="latitude">
           <v-text-field
@@ -103,6 +136,7 @@
               type="number"
               label="Latitude"
               typevariant="underlined"
+              disabled
           ></v-text-field>
         </div>
         <div class="longitude">
@@ -112,25 +146,8 @@
               type="number"
               label="Longitude"
               typevariant="underlined"
+              disabled
           ></v-text-field>
-        </div>
-        <div class="type-of-finish">
-          <v-select
-              multiple
-              data-vv-rules="required"
-              v-model="finishingTypes.value.value"
-              :error-messages="finishingTypes.errorMessage.value"
-              label="Type of finish"
-              :items="['WHITE_FRAME', 'BLACK_FRAME', 'GREEN_FRAME']"
-          ></v-select>
-        </div>
-        <div class="objects-type">
-          <v-select
-              v-model="type.value.value"
-              :error-messages="type.errorMessage.value"
-              label="Object Type"
-              :items="['Townhouse', 'Houses', 'Apartments']"
-          ></v-select>
         </div>
 
         <v-btn
@@ -152,13 +169,24 @@ import * as yup from 'yup';
 import {maxFileSize, maxFileSizeError, requiredError} from '~/constants/form';
 import {serializeNonPOJOs, validateFileArray} from '~/services/utils';
 import {DBPathHelper} from "~/services/db-helper";
-import {IEstate} from "~/models/estate";
+import {Estate, IEstate} from "~/models/estate";
+import {ref} from "vue";
+import {cityItemsArray} from "~/models/city";
+import {finishingTypesItemsArray} from "~/models/finishingTypes";
+import {typesItemsArray} from "~/models/estateTypes";
+import {reactive} from "vue";
 
 definePageMeta({
   layout: 'admin'
 })
 
+const cityItems = ref(cityItemsArray);
+const finishingTypesItems = ref(finishingTypesItemsArray);
+const typesItems = ref(typesItemsArray);
+
 const snackbar = useSnackbar();
+const route = useRoute();
+const runtimeConfig = useRuntimeConfig();
 
 const validationSchema = yup.object({
   images: yup.array().nullable().required().test('is-valid-size', maxFileSizeError,
@@ -198,10 +226,9 @@ const longitude = useField('longitude');
 const finishingTypes = useField('finishingTypes');
 const type = useField('type');
 
-const route = useRoute();
-const runtimeConfig = useRuntimeConfig();
 const path = DBPathHelper.getEstatesPath(runtimeConfig.public.apiHost, route.query.id as string);
 const {data: estate, error} = await useFetch<IEstate>(path);
+//TODO add common loader;
 
 if (error.value) {
   snackbar.add({
@@ -210,16 +237,51 @@ if (error.value) {
   })
 }
 
+const latitudeValue = ref(0);
+const longitudeValue = ref(0);
+
 if (estate.value) {
   const estateValues = serializeNonPOJOs(estate.value);
+  latitudeValue.value = +estateValues.latitude;
+  longitudeValue.value = +estateValues.longitude;
   resetForm({values: {...estateValues}})
 }
 
-const submit = handleSubmit(values => {
-  console.log(values);
-  //TODO send request with form data, reset form, add tooltip;
+const submit = handleSubmit(async values => {
+  //TODO add common loader;
+
+  const estate = new Estate(values as IEstate);
+  const path = DBPathHelper.getEstatesPath(runtimeConfig.public.apiHost);
+  const {data, error} = await useFetch(path, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: {
+      ...estate,
+      id: route.query.id
+    }
+  })
+
+  if (error.value) {
+    snackbar.add({
+      type: 'error',
+      text: 'An error has occurred, estate not saved'
+    })
+  }
+
+  if (data.value) {
+    snackbar.add({
+      type: 'success',
+      text: `Estate successfully updated`
+    })
+  }
 })
 
+const setCoordinates = ({lat, lng}: { lat: number, lng: number }) => {
+  latitude.setValue(lat);
+  longitude.setValue(lng);
+}
 </script>
 
 <style scoped lang="scss">

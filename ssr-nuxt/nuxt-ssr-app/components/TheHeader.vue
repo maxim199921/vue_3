@@ -79,11 +79,11 @@
 import {useI18n} from "vue-i18n";
 import * as yup from "yup";
 import {useField, useForm} from "vee-validate";
-import {cloneDeep} from "lodash";
+import {toRaw} from 'vue'
 
 const {locale} = useI18n();
 const cookieI18n = useCookie<string>('i18n');
-locale.value = cloneDeep(cookieI18n?.value);
+locale.value = toRaw(cookieI18n?.value);
 
 const validationSchema = yup.object({
   i18n: yup.string(),
@@ -91,13 +91,13 @@ const validationSchema = yup.object({
 
 const {values} = useForm({
   validationSchema,
-  initialValues: {i18n: cloneDeep(cookieI18n?.value) || 'en'}
+  initialValues: {i18n: toRaw(cookieI18n?.value) || 'en'}
 })
 
 const i18n = useField('i18n');
 
 const onChangeForm = () => {
-  locale.value = cloneDeep(values).i18n;
-  cookieI18n.value = cloneDeep(values).i18n;
+  locale.value = toRaw(values).i18n;
+  cookieI18n.value = toRaw(values).i18n;
 }
 </script>

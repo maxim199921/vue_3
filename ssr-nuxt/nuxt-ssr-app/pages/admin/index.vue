@@ -12,13 +12,12 @@
     </NuxtLink>
   </div>
   <div class="wrapper pb-40">
-    <template v-for="(estate, index) in estates?.content">
+    <template v-for="(estate, index) in state?.items">
       <v-card class="card">
         <v-img
             :src="estate.url || 'https://cdn.vuetifyjs.com/images/cards/docks.jpg'"
             class="align-end text-white card-img"
             height="200"
-            width="400"
             cover
         >
           <v-card-title>{{ estate.name }}</v-card-title>
@@ -40,30 +39,102 @@
               Edit
             </v-btn>
           </NuxtLink>
+          <v-btn
+              color="red"
+              @click="openDialog(estate.id)"
+          >
+            Delete
+          </v-btn>
         </v-card-actions>
       </v-card>
     </template>
   </div>
+
+  <v-dialog
+      v-model="dialog"
+      persistent
+      width="400"
+  >
+    <v-card>
+      <v-card-title class="text-h5">
+        Delete Estate
+      </v-card-title>
+      <v-card-text>Are you sure?</v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+            color="green-darken-1"
+            variant="text"
+            @click="dialog = false"
+        >
+          Disagree
+        </v-btn>
+        <v-btn
+            color="red"
+            variant="text"
+            @click="deleteEstate()"
+        >
+          Agree
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">
 import {DBPathHelper} from "~/services/db-helper";
 import {IEstate} from "~/models/estate";
+import {reactive, ref, toRaw} from "vue";
 
 definePageMeta({
   layout: 'admin'
 })
+let dialog = ref(false);
+let estateId = ref('');
+const state = reactive({items: [] as IEstate[]});
 
 const runtimeConfig = useRuntimeConfig();
 const snackbar = await useSnackbar();
 const path = DBPathHelper.getEstatesPath(runtimeConfig.public.apiHost);
-const {data: estates, error} = await useFetch<{content: IEstate[]}>(path);
+const {data, error} = await useFetch<{ content: IEstate[] }>(path);
+state.items = (toRaw(data.value))?.content as IEstate[];
 
 if (error.value) {
   snackbar.add({
     type: 'error',
     text: 'An error has occurred, failed to fetch estates'
   })
+}
+
+const deleteEstate = async () => {
+  const id = toRaw(estateId.value);
+  const path = DBPathHelper.getEstatesPath(runtimeConfig.public.apiHost, id);
+
+  const {error} = await useFetch(path, {
+    method: 'DELETE',
+  })
+
+  if (error.value) {
+    snackbar.add({
+      type: 'error',
+      text: `An error has occurred, estate with id: ${id}`,
+    })
+  }
+
+  if (!error.value) {
+    state.items = state.items.filter(estate => estate.id !== id);
+    snackbar.add({
+      type: 'success',
+      text: `Estate was successfully deleted`,
+    })
+  }
+
+  dialog.value = false;
+}
+
+const openDialog = async (id: string) => {
+  estateId.value = id;
+  dialog.value = true;
 }
 </script>
 

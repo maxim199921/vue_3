@@ -164,9 +164,9 @@ import {cityItemsArray} from "~/models/city";
 import {finishingTypesItemsArray} from "~/models/finishingTypes";
 import {FiltersEstate, IFiltersEstate} from "~/models/filters";
 import {getTypesItemsLocale} from "~/services/utils";
-import {cloneDeep, isEmpty} from "lodash";
+import {isEmpty} from "lodash";
 import {typesItemsArray} from "~/models/estateTypes";
-import {defineEmits, ref} from "vue";
+import {defineEmits, ref, toRaw} from "vue";
 import {checkOptionalField, lessThanError, moreThanError} from "~/constants/form";
 
 const cityItems = ref(cityItemsArray);
@@ -248,7 +248,7 @@ const cities = useField('cities');
 const finishingTypes = useField('finishingTypes');
 const types = useField('types');
 
-const filterInitialValues = cloneDeep(cookieFilters.value);
+const filterInitialValues = toRaw(cookieFilters.value);
 
 if (filterInitialValues) {
   resetForm({
@@ -259,7 +259,7 @@ if (filterInitialValues) {
 }
 
 const onChangeForm = () => {
-  const getFilterData = new FiltersEstate((cloneDeep(values)) as IFiltersEstate);
+  const getFilterData = new FiltersEstate((toRaw(values)) as IFiltersEstate);
 
   if (isEmpty(errors.value)) {
     emit('filtersData', getFilterData);

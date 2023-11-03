@@ -9,6 +9,9 @@ export default defineNuxtConfig({
   },
   build: {
     transpile: ['vuetify', 'vue-tel-input', '@fawmi/vue-google-maps'],
+    analyze: {
+      filename: "my-file.html",
+    },
   },
   modules: ['nuxt-lodash', 'nuxt-snackbar'],
   snackbar: {

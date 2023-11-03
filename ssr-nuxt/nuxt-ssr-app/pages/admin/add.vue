@@ -22,6 +22,7 @@
           <v-text-field
               v-model="name.value.value"
               :error-messages="name.errorMessage.value"
+              :counter="255"
               type="text"
               label="Name"
               typevariant="underlined"
@@ -31,6 +32,7 @@
           <v-text-field
               v-model="description.value.value"
               :error-messages="description.errorMessage.value"
+              :counter="255"
               type="text"
               label="Description"
               typevariant="underlined"
@@ -93,7 +95,7 @@
               v-model="address.value.value"
               :error-messages="address.errorMessage.value"
               type="text"
-              label="Adrress"
+              label="Address"
               typevariant="underlined"
           ></v-text-field>
         </div>
@@ -156,8 +158,6 @@
       </form>
     </v-sheet>
   </div>
-
-  <the-snack-bar></the-snack-bar>
 </template>
 
 <script setup lang="ts">
@@ -181,6 +181,7 @@ const finishingTypesItems = ref(finishingTypesItemsArray);
 const typesItems = ref(typesItemsArray);
 
 const snackbar = useSnackbar();
+const runtimeConfig = useRuntimeConfig();
 
 const validationSchema = yup.object({
   images: yup.array().nullable().required().test('is-valid-size', maxFileSizeError,
@@ -222,7 +223,6 @@ const type = useField('type');
 
 const submit = handleSubmit(async values => {
   //TODO add common loader;
-  const runtimeConfig = useRuntimeConfig();
   const estate = new Estate(values as IEstate);
   const path = DBPathHelper.getEstatesPath(runtimeConfig.public.apiHost);
   const {data, error} = await useFetch(path, {
@@ -245,13 +245,13 @@ const submit = handleSubmit(async values => {
   if (data.value) {
     snackbar.add({
       type: 'success',
-      text: `Estate successfully saved with id: ${data.value}`
+      text: `Estate successfully saved`
     })
     resetForm();
   }
 })
 
-const setCoordinates = ({lat, lng}: { lat: string, lng: string }) => {
+const setCoordinates = ({lat, lng}: { lat: number, lng: number }) => {
   latitude.setValue(lat);
   longitude.setValue(lng);
 }
