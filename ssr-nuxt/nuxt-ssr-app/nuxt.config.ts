@@ -13,7 +13,7 @@ export default defineNuxtConfig({
       filename: "my-file.html",
     },
   },
-  modules: ['nuxt-lodash', 'nuxt-snackbar'],
+  modules: ['nuxt-snackbar', '@artmizu/nuxt-prometheus'],
   snackbar: {
     bottom: true,
     right: true,

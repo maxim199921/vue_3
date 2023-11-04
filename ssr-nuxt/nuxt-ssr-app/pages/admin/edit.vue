@@ -174,7 +174,6 @@ import {ref} from "vue";
 import {cityItemsArray} from "~/models/city";
 import {finishingTypesItemsArray} from "~/models/finishingTypes";
 import {typesItemsArray} from "~/models/estateTypes";
-import {reactive} from "vue";
 
 definePageMeta({
   layout: 'admin'
@@ -296,6 +295,6 @@ const setCoordinates = ({lat, lng}: { lat: number, lng: number }) => {
 
 .form {
   padding: $size-3;
-  background: $color-neutral-400;;
+  background: $color-neutral-400;
 }
 </style>

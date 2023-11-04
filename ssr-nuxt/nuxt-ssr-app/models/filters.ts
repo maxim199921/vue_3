@@ -1,7 +1,6 @@
 import {Cities} from "~/models/city";
-import {isNumber} from "lodash";
-import {FinishingTypes, finishingTypesKey} from "~/models/finishingTypes";
-import {Types, typesKey} from "~/models/estateTypes";
+import {FinishingTypes} from "~/models/finishingTypes";
+import {Types} from "~/models/estateTypes";
 
 export interface IFiltersEstate {
     squareF: number | null,
@@ -35,17 +34,17 @@ export class FiltersEstate {
     types: Types[];
 
     constructor(filters?: IFiltersEstate) {
-        this.squareF = (filters?.squareF && isNumber(+filters.squareF)) ? +filters.squareF : null;
-        this.squareT = (filters?.squareT && isNumber(+filters.squareT)) ? +filters.squareT : null;
-        this.priceF = (filters?.priceF && isNumber(+filters.priceF)) ? +filters.priceF : null;
-        this.priceT = (filters?.priceT && isNumber(+filters.priceT)) ? +filters.priceT : null;
-        this.floorF = (filters?.floorF && isNumber(+filters.floorF)) ? +filters.floorF : null;
-        this.floorT = (filters?.floorT && isNumber(+filters.floorT)) ? +filters.floorT : null;
+        this.squareF = (filters?.squareF && typeof +filters.squareF === 'number') ? +filters.squareF : null;
+        this.squareT = (filters?.squareT && typeof +filters.squareT === 'number') ? +filters.squareT : null;
+        this.priceF = (filters?.priceF && typeof +filters.priceF === 'number') ? +filters.priceF : null;
+        this.priceT = (filters?.priceT && typeof +filters.priceT === 'number') ? +filters.priceT : null;
+        this.floorF = (filters?.floorF && typeof +filters.floorF === 'number') ? +filters.floorF : null;
+        this.floorT = (filters?.floorT && typeof +filters.floorT === 'number') ? +filters.floorT : null;
         this.cities = filters?.cities ?? [];
-        this.bedroomF = (filters?.bedroomF && isNumber(+filters.bedroomF)) ? +filters.bedroomF : null;
-        this.bedroomT = (filters?.bedroomT && isNumber(+filters.bedroomT)) ? +filters.bedroomT : null;
-        this.bathroomF = (filters?.bathroomF && isNumber(+filters.bathroomF)) ? +filters.bathroomF : null;
-        this.bathroomT = (filters?.bathroomT && isNumber(+filters.bathroomT)) ? +filters.bathroomT : null;
+        this.bedroomF = (filters?.bedroomF && typeof +filters.bedroomF === 'number') ? +filters.bedroomF : null;
+        this.bedroomT = (filters?.bedroomT && typeof +filters.bedroomT === 'number') ? +filters.bedroomT : null;
+        this.bathroomF = (filters?.bathroomF && typeof +filters.bathroomF === 'number') ? +filters.bathroomF : null;
+        this.bathroomT = (filters?.bathroomT && typeof +filters.bathroomT === 'number') ? +filters.bathroomT : null;
         this.finishingTypes = filters?.finishingTypes ?? [];
         this.types = filters?.types ?? [];
     }

@@ -13,11 +13,11 @@
     "@nuxt/devtools": "latest",
     "@nuxt/typescript-build": "^3.0.1",
     "nuxt": "^3.7.0",
-    "nuxt-lodash": "^2.5.3",
     "rollup-plugin-visualizer": "^5.9.2",
     "vue-i18n": "^9.3.0"
   },
   "dependencies": {
+    "@artmizu/nuxt-prometheus": "^2.2.0",
     "@fawmi/vue-google-maps": "0.9.67",
     "@mdi/font": "^7.2.96",
     "@types/vue-tel-input": "^2.1.2",

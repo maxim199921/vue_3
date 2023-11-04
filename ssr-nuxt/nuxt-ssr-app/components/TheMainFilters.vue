@@ -164,7 +164,6 @@ import {cityItemsArray} from "~/models/city";
 import {finishingTypesItemsArray} from "~/models/finishingTypes";
 import {FiltersEstate, IFiltersEstate} from "~/models/filters";
 import {getTypesItemsLocale} from "~/services/utils";
-import {isEmpty} from "lodash";
 import {typesItemsArray} from "~/models/estateTypes";
 import {defineEmits, ref, toRaw} from "vue";
 import {checkOptionalField, lessThanError, moreThanError} from "~/constants/form";
@@ -261,7 +260,7 @@ if (filterInitialValues) {
 const onChangeForm = () => {
   const getFilterData = new FiltersEstate((toRaw(values)) as IFiltersEstate);
 
-  if (isEmpty(errors.value)) {
+  if (!Object.keys(errors.value).length) {
     emit('filtersData', getFilterData);
   }
 }
